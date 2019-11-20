@@ -11,7 +11,7 @@ const path = require('path');
 const index = require('../routes/index')
 const users = require('../routes/users')
 const library = require('../routes/library')
-var proxy = require('http-proxy-middleware');
+const proxy = require('http-proxy-middleware');
 const k2c = require('koa2-connect');
 const Router = require('koa-router');
 const log4js = require('log4js');
@@ -38,7 +38,7 @@ log4js.configure({
   categories: { default: { appenders: ['cheese'], level: 'error' } }
 });
 const logger = log4js.getLogger('cheese');
-logger.error('aaaa')
+
 //404错误页面
 ErrorHandler.error404(app,logger)
 
