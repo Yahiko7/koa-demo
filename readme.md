@@ -1,4 +1,4 @@
-git 代码仓库
+git 代码仓库:
 koa 项目搭建： 
 koa 脚手架
 npm install koa-generator -g
