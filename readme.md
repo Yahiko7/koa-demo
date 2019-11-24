@@ -1,5 +1,4 @@
-git 代码仓库: https://github.com/Yahiko7/koa-demo
-此项目使用koa-generator脚手架搭建
+基于koa-generator脚手架搭建的项目
 ### koa 项目搭建： 
 ```
 koa 脚手架
@@ -156,7 +155,7 @@ app.context.render = render({
 如何使用的是koa-views，它已经自动转义了
 
 ### koa洋葱模型
-
+```
 // #1
 app.use(async (ctx, next)=>{
     console.log(1)
@@ -173,14 +172,19 @@ app.use(async (ctx, next) => {
 app.use(async (ctx, next) => {
     console.log(3)
 })
+```
+
 
 
 控制台打印:
+```
 1
 2
 3
 2
 1
+```
+
 
 koa-swig 编写：
 ```

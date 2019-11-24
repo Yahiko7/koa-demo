@@ -30,6 +30,8 @@
     "babel-preset-env": "^1.7.0",
     "koa2-connect": "^1.0.2",
     "koa2-proxy-middleware": "^0.0.4",
-    "nodemon": "^1.19.1"
+    "nodemon": "^1.19.1",
+    "puppeteer": "^2.0.0",
+    "rize": "^0.8.0"
   }
 }

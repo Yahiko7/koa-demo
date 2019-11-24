@@ -5,6 +5,7 @@ router.get('/library/list', async (ctx, next) => {
 
   let books = await axios.get('/yii-basic/web/index.php?r=library2/list')
   await ctx.render('list', {
+    title: '图书管理系统',
     books: books.data.data
   })
 })
