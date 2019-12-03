@@ -3,11 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "node bin/www",
+    "start": "node ./src/bin/www",
     "dev1": "./node_modules/.bin/nodemon bin/www",
-    "dev": "NODE_ENV=development ./node_modules/.bin/nodemon bin/www.js --exec babel-node --presets env bin/www.js",
-    "prd": "pm2 start bin/www",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "NODE_ENV=development ./node_modules/.bin/nodemon ./src/bin/www.js --exec babel-node --presets env ./src/bin/www.js",
+    "prd": "pm2 start ./src/bin/www",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "webpack": "./node_modules/.bin/webpack"
   },
   "dependencies": {
     "axios": "^0.19.0",
@@ -26,12 +27,20 @@
     "pug": "^2.0.3"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
+    "@babel/cli": "^7.7.4",
+    "@babel/core": "^7.7.4",
+    "@babel/preset-env": "^7.7.4",
+    "babel-loader": "^8.0.6",
     "babel-preset-env": "^1.7.0",
+    "css-loader": "^3.2.1",
+    "glob": "^7.1.6",
     "koa2-connect": "^1.0.2",
     "koa2-proxy-middleware": "^0.0.4",
-    "nodemon": "^1.19.1",
+    "nodemon": "^1.19.4",
     "puppeteer": "^2.0.0",
-    "rize": "^0.8.0"
+    "rize": "^0.8.0",
+    "style-loader": "^1.0.1",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10"
   }
 }

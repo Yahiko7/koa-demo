@@ -1,0 +1,30 @@
+extends ../layouts/layout.pug
+
+block content
+  button.btn.btn-primary(style="margin-bottom:20px") 新增图书
+  table.table.table-bordered
+    thead
+      tr
+        th #
+        th 书名
+        th 作者
+        th 出版社
+        th 价格
+        th 操作
+    tbody
+      each book in books
+        tr
+          th(scope="row")=book.bookId
+          td=book.bookName
+          td=book.bookWriter
+          td=book.bookPublish
+          td=book.bookPrice
+          td
+            button.btn.btn-danger(style="margin-right:10px;") 删除
+            button.btn.btn-success.btn-update 修改
+
+
+
+
+
+

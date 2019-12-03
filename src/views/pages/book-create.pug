@@ -1,0 +1,23 @@
+extends ../layouts/layout.pug
+
+block content
+  h3=title
+  form(action="sumit")
+    div
+      label(for="book-bookid").control-label 书id：
+      input(type="text",id="book-bookid",maxlength="10").form-control
+    div
+      label(for="book-bookname").control-label 书名：
+      input(type="text",id="book-bookname",maxlength="50").form-control
+    div
+      label(for="book-bookwriter").control-label 作者：
+      input(type="text",id="book-bookwriter",maxlength="30").form-control
+    div
+      label(for="book-bookpublish").control-label 出版商：
+      input(type="text",id="book-bookpublish",maxlength="30").form-control
+    div
+      label(for="bbook-bookprice").control-label 价格：
+      input(type="number",id="book-bookprice",maxlength="30").form-control
+    button(type="submit",style="margin-top:20px").btn.btn-success.btn-save 保存
+  
+  script(src="/javascripts/add.js")
