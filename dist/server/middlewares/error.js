@@ -1,22 +1,35 @@
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
 const onerror = require('koa-onerror');
+
 const path = require('path');
-const pug = require('pug')
-const errorPug = pug.compileFile(path.resolve(__dirname,'../../views/pages/error.pug'))
-module.exports =  {
-  error404(app,logger){
-    app.use(async function pageNotFound(ctx,next) {
+
+const pug = require('pug');
+
+const errorPug = pug.compileFile(path.resolve(__dirname, '../../web/pages/error.pug'));
+var _default = {
+  error404(app, logger) {
+    app.use(async function pageNotFound(ctx, next) {
       await next();
-      if(ctx.status ===  404){
+
+      if (ctx.status === 404) {
         switch (ctx.accepts('html', 'json')) {
           case 'html':
             ctx.type = 'html';
             ctx.body = '<p>Page Not Found</p>';
             break;
+
           case 'json':
             ctx.body = {
               message: 'Page Not Found'
             };
             break;
+
           default:
             ctx.type = 'text';
             ctx.body = 'Page Not Found';
@@ -24,25 +37,26 @@ module.exports =  {
       }
     });
   },
-  error500(app,logger){
-    onerror(app,{
+
+  error500(app, logger) {
+    onerror(app, {
       accepts() {
         return 'html';
       },
+
       html(err, ctx) {
-        logger.error(err)
+        logger.error(err);
         ctx.body = errorPug({
           title: '服务器维护中',
           message: err.message,
-          error:{
+          error: {
             status: 500,
             stack: err.stack
           }
-        })
+        });
       }
-    })
 
-    //手写500错误页面
+    }); //手写500错误页面
     // app.use(async (ctx, next) => {
     //   try {
     //     await next()
@@ -61,5 +75,6 @@ module.exports =  {
     //   }
     // })
   }
-}
 
+};
+exports.default = _default;

@@ -7,9 +7,8 @@
     "client:prod": "scripty",
     "server:dev": "scripty",
     "server:prod": "scripty",
-    "start": "node ./src/bin/www",
-    "dev1": "./node_modules/.bin/nodemon bin/www",
-    "dev": "cross-env NODE_ENV=development ./node_modules/.bin/nodemon ./dist/bin/www.js",
+    "start": "node ./dist/server/bin/www",
+    "dev": "cross-env NODE_ENV=development ./node_modules/.bin/nodemon ./dist/server/bin/www.js",
     "prd": "pm2 start ./src/bin/www",
     "test": "echo \"Error: no test specified\" && exit 1",
     "webpack": "./node_modules/.bin/webpack"
@@ -33,12 +32,20 @@
   "devDependencies": {
     "@babel/cli": "^7.7.4",
     "@babel/core": "^7.7.4",
+    "@babel/plugin-transform-modules-commonjs": "^7.7.4",
     "@babel/preset-env": "^7.7.4",
     "babel-loader": "^8.0.6",
     "babel-preset-env": "^1.7.0",
+    "clean-webpack-plugin": "^3.0.0",
+    "copy-webpack-plugin": "^5.0.5",
     "cross-env": "^6.0.3",
     "css-loader": "^3.2.1",
+    "del": "^5.1.0",
     "glob": "^7.1.6",
+    "gulp": "^4.0.2",
+    "gulp-babel": "^8.0.0",
+    "gulp-newer": "^1.4.0",
+    "gulp-util": "^3.0.8",
     "html-webpack-plugin": "^3.2.0",
     "koa2-connect": "^1.0.2",
     "koa2-proxy-middleware": "^0.0.4",
@@ -49,6 +56,11 @@
     "style-loader": "^1.0.1",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10",
+    "webpack-merge": "^4.2.2",
     "yargs": "^15.0.2"
+  },
+  "scripty": {
+    "path": "./scripts",
+    "windowsPath": "./scripts-win"
   }
 }

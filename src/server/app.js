@@ -1,22 +1,22 @@
-const Koa = require('koa')
-const app = new Koa()
-const views = require('koa-views')
-const json = require('koa-json')
+import Koa from 'koa'
 
-const bodyparser = require('koa-bodyparser')
-const koaLogger = require('koa-logger')
-const path = require('path');
-const index = require('../routes/index')
-const users = require('../routes/users')
-const library = require('../routes/library')
-const proxy = require('http-proxy-middleware');
-const k2c = require('koa2-connect');
-const Router = require('koa-router');
-const log4js = require('log4js');
+import views from 'koa-views'
+import json from 'koa-json'
+import bodyparser from 'koa-bodyparser'
+import koaLogger from 'koa-logger'
+import path from 'path'
+// import proxy from 'http-proxy-middleware'
+// import k2c from 'koa2-connect'
+// import Router from 'koa-router'
+import log4js from 'log4js'
 
 import ErrorHandler from './middlewares/error'
-
 import config from './config/index'
+import indexRoute from './routes/index'
+import usersRoute from './routes/users'
+import libraryRoute from './routes/library'
+
+const app = new Koa()
 
 //转发
 // var router = new Router()
@@ -44,7 +44,6 @@ ErrorHandler.error404(app,logger)
 ErrorHandler.error500(app,logger)
 
 
-
 app.use(bodyparser({
   enableTypes:['json', 'form', 'text']
 }))
@@ -69,9 +68,9 @@ app.use(async (ctx, next) => {
 })
 
 // routes
-app.use(index.routes(), index.allowedMethods())
-app.use(users.routes(), users.allowedMethods())
-app.use(library.routes(), library.allowedMethods())
+app.use(indexRoute.routes(), indexRoute.allowedMethods())
+app.use(usersRoute.routes(), usersRoute.allowedMethods())
+app.use(libraryRoute.routes(), libraryRoute.allowedMethods())
 
 // 错误处理 error-handling 一般打印日志
 app.on('error', async (err, ctx) => {

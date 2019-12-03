@@ -1,8 +1,18 @@
-const path = require('path');
-const entryGlob = require('glob').sync("./src/views/entry/*.js")
+const path = require('path')
+const glob = require('glob')
+const entryGlob = glob.sync("./src/web/entry/*.js")
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const AfterHtmlPlugin = require('./plugins/AfterHtmlPlugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const yargs = require("yargs")
+const merge = require('webpack-merge')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const webpack = require('webpack')
+const env = yargs.argv.mode || 'development'
+
+const configObj = env === 'development' ? require('./config/webpack.dev.js') : require('./config/webpack.prod.js')
+
 
 const entryFiles = {};
 const htmlPlugins = [];
@@ -11,20 +21,24 @@ entryGlob.map(filename => {
   entryFiles[`${entryname}`] = filename;
   htmlPlugins.push(
     new HtmlWebpackPlugin({
-      template: `./src/views/pages/${entryname}.pug`,
-      filename: `../views/pages/${entryname}.pug`,
+      template: `./src/web/pages/${entryname}.pug`,
+      filename: `pages/${entryname}.pug`,
       inject: false,
       chunks: entryname
     })
   )
 })
 
-module.exports = {
-  mode: 'development',
+console.log(`./src/web/pages/*!(${Object.keys(entryFiles).join("|")}).pug`)
+const testFiles = glob.sync(`./src/web/pages/!(${Object.keys(entryFiles).join("|")}).pug`)
+console.log(testFiles)
+
+const baseConfig = {
+  mode: env,
   entry: entryFiles,
   output: {
-    filename: 'js/[name].bundle.js',
-    path: path.resolve(__dirname,'./dist/public'),
+    filename: 'public/js/[name].bundle.js',
+    path: path.resolve(__dirname,'./dist/web'),
     publicPath: '/'
   },
   module: {
@@ -57,10 +71,25 @@ module.exports = {
     ],
   },
   plugins: [
+    // new CleanWebpackPlugin({
+    //   cleanOnceBeforeBuildPatterns: ['./dist/**/*']
+    // }),
+    new webpack.ProgressPlugin(),
     ...htmlPlugins,
     new MiniCssExtractPlugin({
-      filename: 'styles/[name].css',
+      filename: 'public/css/[name].css',
     }),
     new AfterHtmlPlugin(),
+    new CopyWebpackPlugin([
+      { from: './src/web/components', to: 'components' },
+      { from: './src/web/layouts', to: 'layouts' },
+      { from: './src/web/public', to: 'public' },
+      { from: `!(${Object.keys(entryFiles).join("|")}).pug`,context: "./src/web/pages/", to: 'pages' },
+    ]),
+    // new CleanWebpackPlugin({
+    //   cleanOnceBeforeBuildPatterns: ['./dist/web'],
+    // }),
   ]
 };
+
+module.exports = merge(baseConfig,configObj)

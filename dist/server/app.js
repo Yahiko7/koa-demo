@@ -1,24 +1,35 @@
-const Koa = require('koa')
-const app = new Koa()
-const views = require('koa-views')
-const json = require('koa-json')
+"use strict";
 
-const bodyparser = require('koa-bodyparser')
-const koaLogger = require('koa-logger')
-const path = require('path');
-const index = require('../routes/index')
-const users = require('../routes/users')
-const library = require('../routes/library')
-const proxy = require('http-proxy-middleware');
-const k2c = require('koa2-connect');
-const Router = require('koa-router');
-const log4js = require('log4js');
+var _koa = _interopRequireDefault(require("koa"));
 
-const ErrorHandler = require('./middlewares/error') 
+var _koaViews = _interopRequireDefault(require("koa-views"));
 
-const config = require('./config/index')
+var _koaJson = _interopRequireDefault(require("koa-json"));
 
-//转发
+var _koaBodyparser = _interopRequireDefault(require("koa-bodyparser"));
+
+var _koaLogger = _interopRequireDefault(require("koa-logger"));
+
+var _path = _interopRequireDefault(require("path"));
+
+var _log4js = _interopRequireDefault(require("log4js"));
+
+var _error = _interopRequireDefault(require("./middlewares/error"));
+
+var _index = _interopRequireDefault(require("./config/index"));
+
+var _index2 = _interopRequireDefault(require("./routes/index"));
+
+var _users = _interopRequireDefault(require("./routes/users"));
+
+var _library = _interopRequireDefault(require("./routes/library"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// import proxy from 'http-proxy-middleware'
+// import k2c from 'koa2-connect'
+// import Router from 'koa-router'
+const app = new _koa.default(); //转发
 // var router = new Router()
 // router.post('/yii-basic/web/index.php', 
 //   k2c(
@@ -31,51 +42,55 @@ const config = require('./config/index')
 // )
 // app.use(router.routes())
 
-log4js.configure({
-  appenders: { cheese: { type: 'file', filename: path.resolve(__dirname,'../../log/error.log')} },
-  categories: { default: { appenders: ['cheese'], level: 'error' } }
+_log4js.default.configure({
+  appenders: {
+    cheese: {
+      type: 'file',
+      filename: _path.default.resolve(__dirname, '../../log/error.log')
+    }
+  },
+  categories: {
+    default: {
+      appenders: ['cheese'],
+      level: 'error'
+    }
+  }
 });
-const logger = log4js.getLogger('cheese');
 
-//404错误页面
-ErrorHandler.error404(app,logger)
-
-// 错误处理函数 同步操作 error handler
-ErrorHandler.error500(app,logger)
+const logger = _log4js.default.getLogger('cheese'); //404错误页面
 
 
+_error.default.error404(app, logger); // 错误处理函数 同步操作 error handler
 
-app.use(bodyparser({
-  enableTypes:['json', 'form', 'text']
-}))
-app.use(json())
-app.use(koaLogger())
-app.use(require('koa-static')(config.staticDir,{
+
+_error.default.error500(app, logger);
+
+app.use((0, _koaBodyparser.default)({
+  enableTypes: ['json', 'form', 'text']
+}));
+app.use((0, _koaJson.default)());
+app.use((0, _koaLogger.default)());
+app.use(require('koa-static')(_index.default.staticDir, {
   // maxage: 24 * 60 * 60
   maxage: 0
-}))
-
-app.use(views(config.viewDir, {
+}));
+app.use((0, _koaViews.default)(_index.default.viewDir, {
   extension: 'pug',
   cache: true
-}))
+})); // logger
 
-// logger
 app.use(async (ctx, next) => {
-  const start = new Date()
-  await next()
-  const ms = new Date() - start
-  console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
-})
+  const start = new Date();
+  await next();
+  const ms = new Date() - start;
+  console.log(`${ctx.method} ${ctx.url} - ${ms}ms`);
+}); // routes
 
-// routes
-app.use(index.routes(), index.allowedMethods())
-app.use(users.routes(), users.allowedMethods())
-app.use(library.routes(), library.allowedMethods())
+app.use(_index2.default.routes(), _index2.default.allowedMethods());
+app.use(_users.default.routes(), _users.default.allowedMethods());
+app.use(_library.default.routes(), _library.default.allowedMethods()); // 错误处理 error-handling 一般打印日志
 
-// 错误处理 error-handling 一般打印日志
 app.on('error', async (err, ctx) => {
-  console.error("err:",err)
+  console.error("err:", err);
 });
-
-module.exports = app
+module.exports = app;
