@@ -1,12 +1,22 @@
 const path = require('path');
 const entryGlob = require('glob').sync("./src/views/entry/*.js")
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
 
 const entryFiles = {};
+const htmlPlugins = [];
 entryGlob.map(filename => {
   const entryname = /([a-zA-Z]+-[a-zA-Z]+)\.js/.exec(filename)[1];
   entryFiles[`${entryname}`] = filename;
+  htmlPlugins.push(
+    new HtmlWebpackPlugin({
+      template: `./src/views/pages/${entryname}.pug`,
+      filename: `../views/pages/${entryname}.pug`,
+      inject: false,
+      chunks: entryname
+    })
+  )
 })
-
 
 module.exports = {
   mode: 'development',
@@ -39,6 +49,9 @@ module.exports = {
           }
         ]
       }
-    ]
-  }
+    ],
+  },
+  plugins: [
+    ...htmlPlugins
+  ]
 };
