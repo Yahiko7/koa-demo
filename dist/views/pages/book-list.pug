@@ -1,7 +1,7 @@
 extends ../layouts/layout.pug
 
 block styles
-  //- injectcss
+  link(rel='stylesheet', href='/styles/book-list.css')
 
 block content
   button.btn.btn-primary(style="margin-bottom:20px") 新增图书
@@ -26,7 +26,7 @@ block content
   //-           button.btn.btn-danger(style="margin-right:10px;") 删除
   //-           button.btn.btn-success.btn-update 修改
 block scripts
-  //- injectjs
+  script(src="/js/book-list.bundle.js")
 
 
 

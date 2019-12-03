@@ -14,9 +14,9 @@ const k2c = require('koa2-connect');
 const Router = require('koa-router');
 const log4js = require('log4js');
 
-import ErrorHandler from './middlewares/error'
+const ErrorHandler = require('./middlewares/error') 
 
-import config from './config/index'
+const config = require('./config/index')
 
 //转发
 // var router = new Router()

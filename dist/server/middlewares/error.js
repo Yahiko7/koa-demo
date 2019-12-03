@@ -2,7 +2,7 @@ const onerror = require('koa-onerror');
 const path = require('path');
 const pug = require('pug')
 const errorPug = pug.compileFile(path.resolve(__dirname,'../../views/pages/error.pug'))
-export default {
+module.exports =  {
   error404(app,logger){
     app.use(async function pageNotFound(ctx,next) {
       await next();

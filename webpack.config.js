@@ -2,6 +2,7 @@ const path = require('path');
 const entryGlob = require('glob').sync("./src/views/entry/*.js")
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const AfterHtmlPlugin = require('./plugins/AfterHtmlPlugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 const entryFiles = {};
 const htmlPlugins = [];
@@ -23,7 +24,8 @@ module.exports = {
   entry: entryFiles,
   output: {
     filename: 'js/[name].bundle.js',
-    path: path.resolve(__dirname,'./dist/assets') 
+    path: path.resolve(__dirname,'./dist/public'),
+    publicPath: '/'
   },
   module: {
     rules: [
@@ -42,7 +44,10 @@ module.exports = {
         test: /\.css$/,
         use: [
           {
-            loader: 'style-loader'
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              publicPath: '/',
+            },
           },
           {
             loader: 'css-loader'
@@ -53,6 +58,9 @@ module.exports = {
   },
   plugins: [
     ...htmlPlugins,
-    new AfterHtmlPlugin()
+    new MiniCssExtractPlugin({
+      filename: 'styles/[name].css',
+    }),
+    new AfterHtmlPlugin(),
   ]
 };
