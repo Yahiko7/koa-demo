@@ -1,7 +1,7 @@
 const path = require('path');
 const entryGlob = require('glob').sync("./src/views/entry/*.js")
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-
+const AfterHtmlPlugin = require('./plugins/AfterHtmlPlugin')
 
 const entryFiles = {};
 const htmlPlugins = [];
@@ -52,6 +52,7 @@ module.exports = {
     ],
   },
   plugins: [
-    ...htmlPlugins
+    ...htmlPlugins,
+    new AfterHtmlPlugin()
   ]
 };
