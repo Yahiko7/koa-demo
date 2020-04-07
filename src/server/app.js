@@ -12,9 +12,9 @@ import log4js from 'log4js'
 
 import ErrorHandler from './middlewares/error'
 import config from './config/index'
-import indexRoute from './routes/index'
-import usersRoute from './routes/users'
-import libraryRoute from './routes/library'
+
+import { createContainer, Lifetime }  from 'awilix'
+import { loadControllers, scopePerRequest } from 'awilix-koa' 
 
 const app = new Koa()
 
@@ -30,6 +30,26 @@ const app = new Koa()
 //   )
 // )
 // app.use(router.routes())
+
+//loc思想，依赖注入实现
+//1.构建容器
+const container = createContainer();
+
+//2.每一个controller把需要的service注册进去
+console.log(__dirname + ["/services/*.js"])
+
+container.loadModules(
+  [__dirname + ["/services/*.js"]],
+  {
+    resolverOptions: {
+      lifetime: Lifetime.SCOPED
+    },
+    formatName: "camelCase"
+  }
+)
+
+//3. 把容器和路由合并到一起
+app.use(scopePerRequest(container))
 
 log4js.configure({
   appenders: { cheese: { type: 'file', filename: path.resolve(__dirname,'../../log/error.log')} },
@@ -68,9 +88,7 @@ app.use(async (ctx, next) => {
 })
 
 // routes
-app.use(indexRoute.routes(), indexRoute.allowedMethods())
-app.use(usersRoute.routes(), usersRoute.allowedMethods())
-app.use(libraryRoute.routes(), libraryRoute.allowedMethods())
+app.use(loadControllers(__dirname + "/routes/*.js"));
 
 // 错误处理 error-handling 一般打印日志
 app.on('error', async (err, ctx) => {

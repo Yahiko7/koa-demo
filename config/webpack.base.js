@@ -17,7 +17,7 @@ entryGlob.map(filename => {
       template: `src/web/pages/${entryname}.pug`,
       filename: `pages/${entryname}.pug`,
       inject: false,
-      chunks: entryname
+      chunks: ['runtime',entryname]
     })
   )
 })
@@ -25,7 +25,7 @@ module.exports = {
   entry: entryFiles,
   output: {
     filename: 'public/js/[name].bundle.js',
-    path: path.resolve(__dirname,'../dist/web'),
+    path: path.resolve(__dirname,'../dist/web/'),
     publicPath: '/'
   },
   module: {
@@ -71,6 +71,11 @@ module.exports = {
       { from: `!(${Object.keys(entryFiles).join("|")}).pug`,context: "src/web/pages/", to: 'pages' },
     ]),
     
-  ]
+  ],
+  optimization: {
+    runtimeChunk: {
+      name: 'runtime'
+    }
+  }
 };
 

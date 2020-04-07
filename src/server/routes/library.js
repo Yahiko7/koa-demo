@@ -1,31 +1,30 @@
-const router = require('koa-router')()
-const axios = require('axios')
+import { route, GET, POST} from 'awilix-koa'
 
-router.get('/library/list', async (ctx, next) => {
+@route("/library")
+class LibraryControll{
 
-  // let books = await axios.get('/yii-basic/web/index.php?r=library2/list')
-  await ctx.render('book-list', {
-    title: '图书管理系统',
-    // books: books.data.data
-  })
-})
+  constructor({booksServices}){
+    this.booksServices = booksServices;
+  }
 
-router.get('/library/add',async (ctx,next) => {
-  await ctx.render('book-create', {
-    // title: '添加图书'
-    title: '<script>alert("aaas")</script>'
-  })
-})
-//转发请求，进行代理
-// router.post('/library/add',async (ctx,next) => {
-//   await ctx.render('add', {
-//     title: '添加图书'
-//   })
-// })
+  @route("/list")
+  @GET()
+  async actionList(ctx,next){
+    let result = await this.booksServices.getData() 
+    await ctx.render('book-list', {
+      books: result.data
+    })
+  }
 
-router.get('/test', async (ctx, next) => {
-  ctx.body = 'koa2 string22'
-})
+  @route('/add')
+  @GET()
+  async asyncAdd(ctx,next){
+    await ctx.render('book-create',{
+      title: '添加图书'
+    })
+  }
 
+  
+}
 
-module.exports = router
+export default LibraryControll

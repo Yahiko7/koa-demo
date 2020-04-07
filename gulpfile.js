@@ -26,9 +26,12 @@ var paths = {
 // 编译服务端js代码 es转commonjs
 async function serverJsCompile(){
   await gulp.src(paths.src.jsFiles)
-					.pipe(newer(paths.dist.baseDir))
           .pipe(babel({
-            plugins: ['@babel/plugin-transform-modules-commonjs']
+            plugins: [
+						['@babel/plugin-proposal-decorators',{
+							legacy: true
+						}],
+						'@babel/plugin-transform-modules-commonjs']
           }))  
           .pipe(gulp.dest(paths.dist.baseDir))
 }
@@ -38,7 +41,10 @@ function cleanConfig() {
   return gulp.src(paths.src.jsFiles)
     .pipe(
       babel({
-        plugins: ['@babel/plugin-transform-modules-commonjs']
+        plugins: [
+				['@babel/plugin-proposal-decorators',{
+					legacy: true
+				}],'@babel/plugin-transform-modules-commonjs']
       })
     )
     .pipe(
@@ -118,7 +124,7 @@ async function start(){
 gulp.task('start', shell.task('node ./dist/server/bin/www'))
 
 exports.dev = gulp.series(clean,gulp.parallel(serverJsCompile,clientDevCompile),watchHandler)
-
+// exports.dev = gulp.series(clean,gulp.parallel(serverJsCompile),watchHandler)
 exports.build = gulp.series(clean, gulp.parallel( gulp.series(serverJsCompile,cleanConfig),clientProdCompile))
 
 exports.client = gulp.series(clean,clientDevCompile)

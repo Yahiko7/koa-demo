@@ -1,19 +1,23 @@
-const router = require('koa-router')()
+import { route, GET } from 'awilix-koa'
 
-router.get('/', async (ctx, next) => {
-  await ctx.render('index', {
-    title: 'Hello Koa !'
-  })
-})
+@route("/")
+class IndexController{
+  @route("/")
+  @GET()
+  async actionIndex(ctx,next){
+    
+    await ctx.render('index', {
+      title: 'Hello Koa !'
+    })
 
-router.get('/string', async (ctx, next) => {
-  ctx.body = 'koa2 string'
-})
-
-router.get('/json', async (ctx, next) => {
-  ctx.body = {
-    title: 'koa2 json'
   }
-})
 
-module.exports = router
+  @route("/string")
+  @GET()
+  async actionString(ctx,next){
+
+    ctx.body = 'Hello String'
+  }
+}
+
+export default IndexController
